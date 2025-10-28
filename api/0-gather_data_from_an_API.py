@@ -1,31 +1,36 @@
 #!/usr/bin/python3
+"""
+Does nothinig
+"""
 import requests
 import sys
 
-employeeId=sys.argv[1]
+if __name__ == "__main__":
+
+	employeeId=sys.argv[1]
 
 
-url = f"https://jsonplaceholder.typicode.com/users/{employeeId}"
+	url = f"https://jsonplaceholder.typicode.com/users/{employeeId}"
 
-response = requests.get(url)
+	response = requests.get(url)
 
-data= response.json()
+	data= response.json()
 
-username = data['name']
-# print(username)
-
-
-todo_url = f'https://jsonplaceholder.typicode.com/todos'
-paramas = { "userId" : f"{employeeId}" }
-r = requests.get(todo_url,params=paramas)
-
-dta = r.json()
+	username = data['name']
+	# print(username)
 
 
-total= len(dta)
-done_tasks = [task for task in dta if task.get('completed')]
+	todo_url = f'https://jsonplaceholder.typicode.com/todos'
+	paramas = { "userId" : f"{employeeId}" }
+	r = requests.get(todo_url,params=paramas)
 
-print(f'Employee {username} is done with tasks ({len(done_tasks)}/{total}):')
+	dta = r.json()
 
-for title in done_tasks:
-    print(f'\t{title.get("title")}')
+
+	total= len(dta)
+	done_tasks = [task for task in dta if task.get('completed')]
+
+	print(f'Employee {username} is done with tasks ({len(done_tasks)}/{total}):')
+
+	for title in done_tasks:
+    		print(f'\t{title.get("title")}')
