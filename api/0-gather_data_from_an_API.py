@@ -1,36 +1,36 @@
 #!/usr/bin/python3
-"""
-Does nothinig
-"""
+"""Script that returns information about a user's TODO list progress"""
+
 import requests
 import sys
 
-if __name__ == "__main__":
 
-	employeeId=sys.argv[1]
+def main():
+    """main function"""
+    user_id = int(sys.argv[1])
+    todo_url = 'https://jsonplaceholder.typicode.com/todos'
+    user_url = 'https://jsonplaceholder.typicode.com/users/{}'.format(user_id)
+
+    response = requests.get(todo_url)
+
+    total_questions = 0
+    completed = []
+    for todo in response.json():
+
+        if todo['userId'] == user_id:
+            total_questions += 1
+
+            if todo['completed']:
+                completed.append(todo['title'])
+
+    user_name = requests.get(user_url).json()['name']
+
+    printer = ("Employee {} is done with tasks({}/{}):".format(user_name,
+               len(completed), total_questions))
+    print(printer)
+    for q in completed:
+        print("\t {}".format(q))
 
 
-	url = f"https://jsonplaceholder.typicode.com/users/{employeeId}"
-
-	response = requests.get(url)
-
-	data= response.json()
-
-	username = data['name']
-	# print(username)
-
-
-	todo_url = f'https://jsonplaceholder.typicode.com/todos'
-	paramas = { "userId" : f"{employeeId}" }
-	r = requests.get(todo_url,params=paramas)
-
-	dta = r.json()
-
-
-	total= len(dta)
-	done_tasks = [task for task in dta if task.get('completed')]
-
-	print(f'Employee {username} is done with tasks ({len(done_tasks)}/{total}):')
-
-	for title in done_tasks:
-    		print(f'\t{title.get("title")}')
+if __name__ == '__main__':
+    main()
